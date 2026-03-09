@@ -8,11 +8,20 @@ class UserStatusService
     def call
         return { error: "User not found" } unless user_exists?
 
-        {
+        result = {
             full_name: full_name,
             experience: experience,
             todo_summary: todo_summary
         }
+
+        UserStatus.create!(
+            full_name: full_name,
+            experience: experience,
+            pending_task_count: pending_todos.count,
+            next_urgent_task: pending_todos.first&.dig("todo")
+        )
+
+        result
     end
 
     private
@@ -33,7 +42,7 @@ class UserStatusService
     end
 
     def pending_todos
-        @pending_todos ||= todos["todos"].select { |t| t["completed"] == false } || []
+        @pending_todos ||= todos["todos"]&.select { |t| t["completed"] == false } || []
     end
 
     def user
@@ -43,7 +52,7 @@ class UserStatusService
     end
 
     def todos
-        @todos ||= HTTParty.get("#{BASE_URL}/todos/users/#{@id}")
+        @todos ||= HTTParty.get("#{BASE_URL}/todos/user/#{@id}")
     rescue StandardError => e
         Rails.logger.error('Todos not found', error: e)
         {"todo" => []}

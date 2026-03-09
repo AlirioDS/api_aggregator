@@ -17,7 +17,7 @@ RSpec.describe UserStatusService do
         stub_request(:get, "https://dummyjson.com/users/1")
           .to_return(status: 200, body: user_response, headers: headers)
 
-        stub_request(:get, "https://dummyjson.com/todos/users/1")
+        stub_request(:get, "https://dummyjson.com/todos/user/1")
           .to_return(status: 200, body: todos_response, headers: headers)
     end
 
@@ -29,6 +29,22 @@ RSpec.describe UserStatusService do
     it "returns Rookie when age is under 50" do
         result = described_class.new(1).call
         expect(result[:experience]).to eq("Rookie")
+    end
+
+    it "saves to UserStatus table" do
+        expect {
+            described_class.new(1).call
+    }.to change(UserStatus, :count).by(1)
+    end
+
+    it "saves correct data to UserStatus" do
+        described_class.new(1).call
+        record = UserStatus.last
+
+        expect(record.full_name).to eq("Alirio Diaz")
+        expect(record.experience).to eq("Rookie")
+        expect(record.pending_task_count).to eq(1)
+        expect(record.next_urgent_task).to eq("Learn Ruby")
     end
 
     context "when age is over 50" do

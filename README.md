@@ -6,6 +6,7 @@
   cd api_aggregator
   cp .env.example .env
   docker compose -f docker-compose.development.yml up --build
+  docker compose -f docker-compose.development.yml exec rails-api bin/rails db:reset
 ```
 
 The app runs on localhost:3001

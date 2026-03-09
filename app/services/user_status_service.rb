@@ -43,7 +43,7 @@ class UserStatusService
     end
 
     def todos
-        @todos ||= HTTParty.get("#{BASE_URL}/todos/user/#{@id}")
+        @todos ||= HTTParty.get("#{BASE_URL}/todos/users/#{@id}")
     rescue StandardError => e
         Rails.logger.error('Todos not found', error: e)
         {"todo" => []}

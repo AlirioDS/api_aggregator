@@ -1,24 +1,17 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+### Setup
+```bash
+  git clone git@github.com:AlirioDS/api_aggregator.git
+  cd api_aggregator
+  cp .env.example .env
+  docker compose -f docker-compose.development.yml up --build
+```
 
-Things you may want to cover:
+The app runs on localhost:3001
 
-* Ruby version
+Tests
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```bash
+docker compose -f docker-compose.development.yml exec rails-api bundle exec rspec
+```

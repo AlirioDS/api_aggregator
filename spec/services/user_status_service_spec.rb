@@ -59,12 +59,12 @@ RSpec.describe UserStatusService do
 
         it "returns pending task count" do
             result = described_class.new(1).call
-            expect(result[:todo_summary][:pending_task_count]).to eq(1)
+            expect(result[:pending_task_count]).to eq(1)
         end
 
         it "returns next urgent task" do
             result = described_class.new(1).call
-            expect(result[:todo_summary][:next_urgent_task]).to eq("Learn Ruby")
+            expect(result[:next_urgent_task]).to eq("Learn Ruby")
         end
 
         context "when user does not exist" do
